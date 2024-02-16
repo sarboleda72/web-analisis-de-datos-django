@@ -2,13 +2,14 @@
 <!doctype html>
 <html lang="en">
 
-<head>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SENA Insight</title>
-    <link rel="shortcut icon" type="image/png" href="{% static 'assets/images/logos/insight.png' %}" />
+    <link rel="shortcut icon" type="image/png"
+      href="{% static 'assets/images/logos/insight.png' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/styles.min.css' %}" />
-</head>
+  </head>
 
   <body>
     <!--  Body Wrapper -->
@@ -17,9 +18,19 @@
       data-sidebar-position="fixed" data-header-position="fixed">
       <!--  Main wrapper -->
       <div class="body-wrapper mx-auto">
+        <header class="text-center ">
+          <h1>SENA Insight</h1>
+        </header>
 
         <div class="container-fluid">
           <!--  Row 1 -->
+          <div class="row">
+            <div class="input-group mb-3">
+              <input type="file" class="form-control" id="inputGroupFile02">
+              <button type="submit"
+                class="btn btn-success text-black">Analizar</button>
+            </div>
+          </div>
           <div class="row">
             <div class="col-lg-8 d-flex align-items-strech">
               <div class="card w-100">
@@ -349,11 +360,14 @@
       </div>
     </div>
     <script src="{% static 'assets/libs/jquery/dist/jquery.min.js'%}"></script>
-    <script src="{% static 'assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js'%}"></script>
+    <script
+      src="{% static 'assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js'%}"></script>
     <script src="{% static 'assets/js/sidebarmenu.js'%}"></script>
     <script src="{% static 'assets/js/app.min.js'%}"></script>
-    <script src="{% static 'assets/libs/apexcharts/dist/apexcharts.min.js'%}"></script>
-    <script src="{% static 'assets/libs/simplebar/dist/simplebar.js'%}"></script>
+    <script
+      src="{% static 'assets/libs/apexcharts/dist/apexcharts.min.js'%}"></script>
+    <script
+      src="{% static 'assets/libs/simplebar/dist/simplebar.js'%}"></script>
     <script src="{% static 'assets/js/dashboard.js'%}"></script>
   </body>
 
