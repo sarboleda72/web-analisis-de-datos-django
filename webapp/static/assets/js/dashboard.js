@@ -110,8 +110,8 @@ $(function () {
   // =====================================
   var breakup = {
     color: "#adb5bd",
-    series: [38, 40, 25],
-    labels: ["2022", "2021", "2020"],
+    series: [parseInt(document.getElementById('cancelado').getAttribute('data-info')), parseInt(document.getElementById('retirado').getAttribute('data-info'))],
+    labels: ["Cancelado", "Retiro voluntario"],
     chart: {
       width: 180,
       type: "donut",
@@ -138,7 +138,7 @@ $(function () {
     legend: {
       show: false,
     },
-    colors: ["#5D87FF", "#ecf2ff", "#F9F9FD"],
+    colors: ["#13deb9", "#fa896b"],
 
     responsive: [
       {
