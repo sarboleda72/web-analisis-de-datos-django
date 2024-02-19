@@ -7,34 +7,34 @@ $(function () {
   // =====================================
 
   var select = document.getElementById('razones');
-  var chartDiv=document.getElementById('chart');
+  var chartDiv = document.getElementById('chart');
 
   // Agregar un listener para el evento de cambio
   select.addEventListener('change', function () {
     // Obtener el valor seleccionado
     var valorSeleccionado = select.value;
-    
+
     if (valorSeleccionado == 1) {
-      chartDiv.innerHTML="";
-      
-      graficoBarras('factor', [["Dificultades","económicas"], ["Problemas personales/","familiares"], ["Falta de interés en el"," programa de formación"], ["Falta de apoyo","académico"], ["Oportunidades laborales","externas"]]);
+      chartDiv.innerHTML = "";
+
+      graficoBarras('factor', [["Dificultades", "económicas"], ["Problemas personales/", "familiares"], ["Falta de interés en el", " programa de formación"], ["Falta de apoyo", "académico"], ["Oportunidades laborales", "externas"]]);
     }
     if (valorSeleccionado == 2) {
-      chartDiv.innerHTML="";
+      chartDiv.innerHTML = "";
       graficoBarras('edad', ["Mayor de edad", "Menor de edad"]);
     }
-    if(valorSeleccionado==3){
-      chartDiv.innerHTML="";
+    if (valorSeleccionado == 3) {
+      chartDiv.innerHTML = "";
       graficoBarrasColores();
     }
-    if(valorSeleccionado==4){
-      chartDiv.innerHTML="";
+    if (valorSeleccionado == 4) {
+      chartDiv.innerHTML = "";
       chartDiv.removeAttribute("style");
     }
   });
 
   // Llamar a la función para cargar el gráfico al inicio
-  graficoBarras('factor', [["Dificultades","económicas"], ["Problemas personales/","familiares"], ["Falta de interés en el"," programa de formación"], ["Falta de apoyo","académico"], ["Oportunidades laborales","externas"]]);
+  graficoBarras('factor', [["Dificultades", "económicas"], ["Problemas personales/", "familiares"], ["Falta de interés en el", " programa de formación"], ["Falta de apoyo", "académico"], ["Oportunidades laborales", "externas"]]);
 
 
   function graficoBarras(nombreOpcion, categorias) {
@@ -145,53 +145,63 @@ $(function () {
   //Grafico barras de colores
   //======================================
 
-  function graficoBarrasColores(){
+  function graficoBarrasColores() {
     var colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33F6', '#F6FF33', '#33F6FF', '#A633FF', '#FF33A6'];
+
+    var vector = JSON.parse(document.getElementById('tecnologica').getAttribute('data-vector'));
+
+    var categorias = [
+      ['Analisis', 'y Desarrollo', 'de Software'],
+      ['Animacion', 'Digital'],
+      ['Automatizacion', 'de Sistemas', 'Mecatronicos'],
+      ['Desarrollo', 'de Productos', 'Electronicos'],
+      ['Desarrollo', 'de Sistemas', 'Electronicos Industriales'],
+      ['Diseno', 'e Integracion', 'de Automatismos', 'Mecatronicos'],
+      ['Gestion', 'de la Produccion', 'Industrial'],
+      ['Gestion Integral', 'del Transporte'],
+      ['Implementacion', 'de Infraestructura', 'de Tecnologias', 'de la Informacion', 'y las Comunicaciones'],
+      ['Implementacion', 'de Redes', 'y Servicios', 'de Telecomunicaciones'],
+      ['Mantenimiento', 'de Equipo', 'Biomedico'],
+      ['Produccion', 'de Componentes', 'Mecanicos', 'con Maquinas', 'de Control', 'Numerico Computarizado']
+    ]
+
 
     var options = {
       series: [{
-      data: [21, 22, 10, 28, 16, 21, 13, 30]
-    }],
+        data: vector
+      }],
       chart: {
-      height: 345,
-      type: 'bar',
-      events: {
-        click: function(chart, w, e) {
-          // console.log(chart, w, e)
+        height: 345,
+        type: 'bar',
+        events: {
+          click: function (chart, w, e) {
+            // console.log(chart, w, e)
+          }
+        }
+      },
+      colors: colors,
+      plotOptions: {
+        bar: {
+          columnWidth: '45%',
+          distributed: true,
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      legend: {
+        show: true
+      },
+      xaxis: {
+        categories: categorias,
+        labels: {
+          show: false,
+          style: {
+            colors: colors,
+            fontSize: '12px'
+          }
         }
       }
-    },
-    colors: colors,
-    plotOptions: {
-      bar: {
-        columnWidth: '45%',
-        distributed: true,
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    legend: {
-      show: false
-    },
-    xaxis: {
-      categories: [
-        ['John', 'Doe'],
-        ['Joe', 'Smith'],
-        ['Jake', 'Williams'],
-        'Amber',
-        ['Peter', 'Brown'],
-        ['Mary', 'Evans'],
-        ['David', 'Wilson'],
-        ['Lily', 'Roberts'], 
-      ],
-      labels: {
-        style: {
-          colors: colors,
-          fontSize: '12px'
-        }
-      }
-    }
     };
 
     var chart = new ApexCharts(document.querySelector("#chart"), options);

@@ -52,6 +52,47 @@ def calculoEdad(tipoDocumento,estadoAprendiz):
                 menorEdad += 1
     return [mayorEdad,menorEdad]
 
+def calculoCarreraTecnologica(carrerasTecnologicas,estadoAprendiz):
+    adso=0
+    aniDig=0
+    autSisMec=0
+    desProEle=0
+    desSisEleind=0
+    disIntAutMec=0
+    gesProInd=0
+    gesIntTra=0
+    impInfTecInfCom=0
+    impRedSerTel=0
+    manEquBio=0
+    proComMecMaqCNC=0
+    for carrera,estado in zip(carrerasTecnologicas,estadoAprendiz):
+        if estado=='Cancelado' or estado=='Retiro voluntario':
+            if carrera=='ANALISIS Y DESARROLLO DE SOFTWARE.':
+                adso+=1
+            elif carrera=='ANIMACION DIGITAL':
+                aniDig+=1
+            elif carrera=='AUTOMATIZACION DE SISTEMAS MECATRONICOS':
+                autSisMec+=1
+            elif carrera=='DESARROLLO DE PRODUCTOS ELECTRONICOS':
+                desProEle+=1
+            elif carrera=='DESARROLLO DE SISTEMAS ELECTRONICOS INDUSTRIALES':
+                desSisEleind+=1;  
+            elif carrera=='DISEÑO E INTEGRACIÓN DE AUTOMATISMOS MECATRÓNICOS':
+                disIntAutMec+=1
+            elif carrera=='GESTIÓN DE LA PRODUCCIÓN INDUSTRIAL':
+                gesProInd+=1
+            elif carrera=='GESTION INTEGRAL DEL TRANSPORTE':
+                gesIntTra+=1
+            elif carrera=='IMPLEMENTACION DE INFRAESTRUCTURA DE TECNOLOGIAS DE LA INFORMACION Y LAS COMUNICACIONES.':
+                impInfTecInfCom+=1
+            elif carrera=='IMPLEMENTACION DE REDES Y SERVICIOS DE TELECOMUNICACIONES':
+                impRedSerTel+=1
+            elif carrera=='MANTENIMIENTO DE EQUIPO BIOMÉDICO':
+                manEquBio+=1
+            elif carrera=='PRODUCCION DE COMPONENTES MECANICOS CON MAQUINAS DE CONTROL NUMERICO COMPUTARIZADO':
+                proComMecMaqCNC+=1
+    
+    return [adso,aniDig,autSisMec,desProEle,desSisEleind,disIntAutMec,gesProInd,gesIntTra,impInfTecInfCom,impRedSerTel,manEquBio,proComMecMaqCNC]
 def index(request):
     if request.method == 'POST' and request.FILES['excel']:
         excel = request.FILES['excel']
@@ -69,11 +110,13 @@ def index(request):
         desercion=calculoDesercion(df['ESTADO_APRENDIZ'])
         factor=calculoFactor(df['FACTORES'],df['ESTADO_APRENDIZ'])
         edad=calculoEdad(df['TIPO_DOCUMENTO'],df['ESTADO_APRENDIZ'])
+        carreraTecnologica=calculoCarreraTecnologica(df['PROGRAMA'],df['ESTADO_APRENDIZ'])
         
         mensaje={
             'desercion':desercion,
             'factor':factor,
-            'edad':edad
+            'edad':edad,
+            'tecnologica':carreraTecnologica
         }
         return render(request, 'index.html',mensaje)
     
