@@ -93,6 +93,7 @@ def calculoCarreraTecnologica(carrerasTecnologicas,estadoAprendiz):
                 proComMecMaqCNC+=1
     
     return [adso,aniDig,autSisMec,desProEle,desSisEleind,disIntAutMec,gesProInd,gesIntTra,impInfTecInfCom,impRedSerTel,manEquBio,proComMecMaqCNC]
+
 def index(request):
     if request.method == 'POST' and request.FILES['excel']:
         excel = request.FILES['excel']
