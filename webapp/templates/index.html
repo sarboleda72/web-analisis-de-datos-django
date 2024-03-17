@@ -8,6 +8,14 @@
   <title>SENA Insight</title>
   <link rel="shortcut icon" type="image/png" href="{% static 'assets/images/logos/insight.png' %}" />
   <link rel="stylesheet" href="{% static 'assets/css/styles.min.css' %}" />
+  <style>
+    .container-carousel {
+      height: 220px;
+      max-height: 100%;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+  </style>
 </head>
 
 <body>
@@ -15,8 +23,8 @@
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed">
     <!--  Main wrapper -->
-    <div class="body-wrapper mx-auto">
-      <header class="text-center ">
+    <div class="body-wrapper mt-3 mx-auto">
+      <header class="text-center">
         <h1>SENA Insight</h1>
       </header>
 
@@ -33,86 +41,152 @@
         </div>
 
         <!--  carrucel -->
-        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <div class="row">
-                <div class="col">
-                  <div class="card">
-                    <div class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
-                      <i class="ti ti-calendar fs-6"></i>
+        <div class="row container-carousel">
+          <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="row">
+                  <div class="col">
+                    <div class="card">
+                      <div class="text-center">
+                        <img src="{% static 'assets/images/icons/iconHombre.png' %}" class="card-img-top w-25">
+                      </div>
+                      <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                          <span
+                            class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-user text-success"></i>
+                          </span>
+                          <p class="text-dark me-1 fs-3 mb-0">{{hombres.totalHombres}}</p>
+                          <p class="fs-3 mb-0">Total hombres</p>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                          <span
+                            class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-user text-danger"></i>
+                          </span>
+                          <p class="text-dark me-1 fs-3 mb-0">{{hombres.hombresDesertados}}</p>
+                          <p class="fs-3 mb-0">Deserción hombres</p>
+                        </div>
+                      </div>
                     </div>
-                    <div class="card-body">
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the card's content.</p>
+                  </div>
+                  <div class="col">
+                    <div class="card">
+                      <div class="text-center">
+                        <img src="{% static 'assets/images/icons/iconMujer.png' %}" class="card-img-top w-25">
+                      </div>
+                      <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                          <span
+                            class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-user text-success"></i>
+                          </span>
+                          <p class="text-dark me-1 fs-3 mb-0">{{mujeres.totalMujeres}}</p>
+                          <p class="fs-3 mb-0">Total mujeres</p>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                          <span
+                            class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-user text-danger"></i>
+                          </span>
+                          <p class="text-dark me-1 fs-3 mb-0">{{mujeres.mujeresDesertados}}</p>
+                          <p class="fs-3 mb-0">Deserción mujeres</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="d-flex justify-content-center">
+                          <div id="hombresvsmujeres" data-vector="{{hvM}}"></div>
+                        </div>
+                      </div>
+                      <p class="fs-4 mb-0 text-center">Deserción por genero</p>
                     </div>
                   </div>
                 </div>
-                <div class="col">
-                  <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the card's content.</p>
+              </div>
+
+              <!--  Pagina 2 -->
+              <div class="carousel-item">
+                <div class="row">
+                  <div class="col">
+                    <div class="card">
+                      <div class="text-center">
+                        <img src="{% static 'assets/images/icons/tecnico.png' %}" class="card-img-top w-25">
+                      </div>
+                      <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                          <span
+                            class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-user text-success"></i>
+                          </span>
+                          <p class="text-dark me-1 fs-3 mb-0">{{nivelFormacion.totalTecnicos}}</p>
+                          <p class="fs-3 mb-0">Total técnicos</p>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                          <span
+                            class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-user text-danger"></i>
+                          </span>
+                          <p class="text-dark me-1 fs-3 mb-0">{{nivelFormacion.tecnicosDesertados}}</p>
+                          <p class="fs-3 mb-0">Deserción técnicos</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="col">
-                  <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the card's content.</p>
+                  <div class="col">
+                    <div class="card">
+                      <div class="text-center">
+                        <img src="{% static 'assets/images/icons/tecnologo.png' %}" class="card-img-top w-25">
+                      </div>
+                      <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                          <span
+                            class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-user text-success"></i>
+                          </span>
+                          <p class="text-dark me-1 fs-3 mb-0">{{nivelFormacion.totalTecnologos}}</p>
+                          <p class="fs-3 mb-0">Total tecnólogos</p>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                          <span
+                            class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-user text-danger"></i>
+                          </span>
+                          <p class="text-dark me-1 fs-3 mb-0">{{nivelFormacion.tecnologosDesertados}}</p>
+                          <p class="fs-3 mb-0">Deserción tecnólogos</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="d-flex justify-content-center">
+                          <div id="niveldeformacion" data-vector="{{porcentajeFormacion}}"></div>
+                        </div>
+                      </div>
+                      <p class="fs-4 mb-0 text-center">Deserción por nivel de formación</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="carousel-item">
-              <div class="row">
-                <div class="col">
-                  <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the card's content.</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the card's content.</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                        the card's content.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
         </div>
 
-
-        <!--  carrucel -->
-
+        <!-- fin carrucel -->
         <div class="row">
           <div class="col-lg-7 d-flex align-items-strech">
             <div class="card w-100">
@@ -188,7 +262,8 @@
                       </div>
                       <div class="col-4">
                         <div class="d-flex justify-content-end">
-                          <div class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
+                          <div
+                            class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
                             <i class="ti ti-calendar fs-6"></i>
                           </div>
                         </div>

@@ -321,5 +321,61 @@ $(function () {
   };
   
   new ApexCharts(document.querySelector("#earning"), earning).render();
+
+  // =====================================
+  // Hombres vs mujeres
+  // =====================================
+  var vector = JSON.parse(document.getElementById('hombresvsmujeres').getAttribute('data-vector'));      
+  var hombresvsmujeres = {
+    series: vector,
+    chart: {
+    width: 250,
+    type: 'pie',
+  },
+  labels: ['Masculino', 'Femenino'],
+  responsive: [{
+    breakpoint: 480,
+    options: {
+      chart: {
+        width: 200
+      },
+      legend: {
+        position: 'bottom'
+      }
+    }
+  }]
+  };
+
+  var hombresvsmujeres = new ApexCharts(document.querySelector("#hombresvsmujeres"), hombresvsmujeres);
+  hombresvsmujeres.render();
+  // =====================================
+  // tecnologo vs tecnicos
+  // =====================================
+  var vector = JSON.parse(document.getElementById('niveldeformacion').getAttribute('data-vector'));  
+
+  var nivelDeFormacion = {
+    series: vector,
+    chart: {
+    type: 'donut',
+    width: 250,
+  },
+  labels: ['Técnico', 'Tecnólogo'],
+  colors: ["#FFA500", "#1E90FF"],
+  responsive: [{
+    breakpoint: 480,
+    options: {
+      chart: {
+        width: 200
+      },
+      legend: {
+        position: 'bottom'
+      }
+    }
+  }]
+  };
+
+  var nivelDeFormacion = new ApexCharts(document.querySelector("#niveldeformacion"), nivelDeFormacion);
+  nivelDeFormacion.render();
   
+
 })

@@ -4,8 +4,57 @@ from django.core.files.storage import FileSystemStorage
 import pandas as pd
 import os
 
-
 # Create your views here.
+def calculoNivelformacion(nivelFormacion,estadoAprendiz):
+    tecnicosDesertados=0
+    tecnologosDesertados=0
+    totalTecnicos=0
+    totalTecnologos=0
+
+    for formacion,estado in zip(nivelFormacion,estadoAprendiz):
+        totalTecnicos += 1 if formacion=='TÉCNICO' else 0
+        totalTecnologos += 1 if formacion=='TECNÓLOGO' else 0
+
+        if estado=='Cancelado' or estado=='Retiro voluntario':
+            tecnicosDesertados+= 1 if formacion=='TÉCNICO' else 0
+            tecnologosDesertados+= 1 if formacion=='TECNÓLOGO' else 0
+
+    totalDesertados=tecnicosDesertados+tecnologosDesertados
+    porcentajeTecnicos=round(tecnicosDesertados*100/totalDesertados,2)
+    porcentajeTecnologos=round(tecnologosDesertados*100/totalDesertados,2)
+        
+    
+    return {'totalDesertados':totalDesertados,'totalTecnicos':totalTecnicos,'tecnicosDesertados':tecnicosDesertados,'totalTecnologos':totalTecnologos,'tecnologosDesertados':tecnologosDesertados,'porcentajes':[porcentajeTecnicos,porcentajeTecnologos]}
+
+def calculoHombresvsMujeres(hombresDesertados,mujeresDesertadas):
+    totalDesertados=hombresDesertados+mujeresDesertadas
+    porcentajeHombres=round(hombresDesertados*100/totalDesertados,2)
+    porcentajeMujeres=round(mujeresDesertadas*100/totalDesertados,2)
+
+    return [porcentajeHombres,porcentajeMujeres]
+
+def calculoMujeres(generos,estadoAprendiz):
+    mujeresDesertados=0
+    totalMujeres=0
+
+    for genero,estado in zip(generos,estadoAprendiz):
+        
+        totalMujeres += 1 if genero=='F' else 0
+        if estado=='Cancelado' or estado=='Retiro voluntario':
+            mujeresDesertados+= 1 if genero=='F' else 0
+    
+    return {'totalMujeres':totalMujeres,'mujeresDesertados':mujeresDesertados}
+def calculoHombres(generos,estadoAprendiz):
+    hombresDesertados=0
+    totalHombres=0
+
+    for genero,estado in zip(generos,estadoAprendiz):
+        
+        totalHombres += 1 if genero=='M' else 0
+        if estado=='Cancelado' or estado=='Retiro voluntario':
+            hombresDesertados+= 1 if genero=='M' else 0
+    
+    return {'totalHombres':totalHombres,'hombresDesertados':hombresDesertados}
 
 def calculoFrecuenciaMeses(fechaRetiro, estadoAprendiz):
     meses=[0,0,0,0,0,0,0,0,0,0,0,0]
@@ -40,7 +89,6 @@ def calculoFrecuenciaMeses(fechaRetiro, estadoAprendiz):
             elif mes=="12":
                 meses[11]+=1
     return  meses
-
 
 def calculoDesercion(estadoAprendiz):
     cancelado=0
@@ -150,14 +198,22 @@ def index(request):
         edad=calculoEdad(df['TIPO_DOCUMENTO'],df['ESTADO_APRENDIZ'],df['EDAD'])
         carreraTecnologica=calculoCarreraTecnologica(df['PROGRAMA'],df['ESTADO_APRENDIZ'])
         frecuenciaMeses=calculoFrecuenciaMeses(df['FECHA_RETIRO'],df['ESTADO_APRENDIZ'])
-
+        hombres=calculoHombres(df['GENERO'],df['ESTADO_APRENDIZ'])
+        mujeres=calculoMujeres(df['GENERO'],df['ESTADO_APRENDIZ'])
+        hombresvsMujeres=calculoHombresvsMujeres(hombres['totalHombres'],mujeres['totalMujeres'])
+        nivelFormacion=calculoNivelformacion(df['NIVEL_DE_FORMACION'],df['ESTADO_APRENDIZ'])
 
         mensaje={
             'desercion':desercion,
             'factor':factor,
             'edad':edad,
             'tecnologica':carreraTecnologica,
-            'frecuencia':frecuenciaMeses
+            'frecuencia':frecuenciaMeses,
+            'hombres':hombres,
+            'mujeres':mujeres,
+            'hvM':hombresvsMujeres,
+            'nivelFormacion':nivelFormacion,
+            'porcentajeFormacion':nivelFormacion['porcentajes']
         }
         return render(request, 'index.html',mensaje)
     
