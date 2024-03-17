@@ -219,44 +219,46 @@ def calculoCarreraTecnologica(carrerasTecnologicas,estadoAprendiz):
 
 def index(request):
     if 'excel' in request.FILES:
-        if request.method == 'POST' and request.FILES['excel']:
-            excel = request.FILES['excel']
-            fs =FileSystemStorage()
-            if fs.exists('db.xlsx'):
-                fs.delete('db.xlsx')
-            filename= fs.save('db.xlsx', excel)  # Guarda el archivo en la carpeta de media
-            ruta_archivo = os.path.join(settings.MEDIA_ROOT, filename)#captura ruta interna
-            
-            #captura pandas
-            df = pd.read_excel(ruta_archivo)
-            
-            #Llamado de funciones que calculan las metricas
-            desercion=calculoDesercion(df['ESTADO_APRENDIZ'])
-            factor=calculoFactor(df['FACTORES'],df['ESTADO_APRENDIZ'])
-            edad=calculoEdad(df['TIPO_DOCUMENTO'],df['ESTADO_APRENDIZ'],df['EDAD'])
-            carreraTecnologica=calculoCarreraTecnologica(df['PROGRAMA'],df['ESTADO_APRENDIZ'])
-            frecuenciaMeses=calculoFrecuenciaMeses(df['FECHA_RETIRO'],df['ESTADO_APRENDIZ'])
-            hombres=calculoHombres(df['GENERO'],df['ESTADO_APRENDIZ'])
-            mujeres=calculoMujeres(df['GENERO'],df['ESTADO_APRENDIZ'])
-            hombresvsMujeres=calculoHombresvsMujeres(hombres['totalHombres'],mujeres['totalMujeres'])
-            nivelFormacion=calculoNivelformacion(df['NIVEL_DE_FORMACION'],df['ESTADO_APRENDIZ'])
-            permanencia=calculoPermanencia(df['FECHA_INGRESO'],df['FECHA_RETIRO'],df['ESTADO_APRENDIZ'])
-            retencion=[100-desercion['desertados'],desercion['desertados']]
+        archivo_excel = request.FILES['excel']
+        if archivo_excel.name.endswith('.xlsx'):
+            if request.method == 'POST' and request.FILES['excel']:
+                excel = request.FILES['excel']
+                fs =FileSystemStorage()
+                if fs.exists('db.xlsx'):
+                    fs.delete('db.xlsx')
+                filename= fs.save('db.xlsx', excel)  # Guarda el archivo en la carpeta de media
+                ruta_archivo = os.path.join(settings.MEDIA_ROOT, filename)#captura ruta interna
+                
+                #captura pandas
+                df = pd.read_excel(ruta_archivo)
+                
+                #Llamado de funciones que calculan las metricas
+                desercion=calculoDesercion(df['ESTADO_APRENDIZ'])
+                factor=calculoFactor(df['FACTORES'],df['ESTADO_APRENDIZ'])
+                edad=calculoEdad(df['TIPO_DOCUMENTO'],df['ESTADO_APRENDIZ'],df['EDAD'])
+                carreraTecnologica=calculoCarreraTecnologica(df['PROGRAMA'],df['ESTADO_APRENDIZ'])
+                frecuenciaMeses=calculoFrecuenciaMeses(df['FECHA_RETIRO'],df['ESTADO_APRENDIZ'])
+                hombres=calculoHombres(df['GENERO'],df['ESTADO_APRENDIZ'])
+                mujeres=calculoMujeres(df['GENERO'],df['ESTADO_APRENDIZ'])
+                hombresvsMujeres=calculoHombresvsMujeres(hombres['totalHombres'],mujeres['totalMujeres'])
+                nivelFormacion=calculoNivelformacion(df['NIVEL_DE_FORMACION'],df['ESTADO_APRENDIZ'])
+                permanencia=calculoPermanencia(df['FECHA_INGRESO'],df['FECHA_RETIRO'],df['ESTADO_APRENDIZ'])
+                retencion=[100-desercion['desertados'],desercion['desertados']]
 
-            mensaje={
-                'desercion':desercion,
-                'factor':factor,
-                'edad':edad,
-                'tecnologica':carreraTecnologica,
-                'frecuencia':frecuenciaMeses,
-                'hombres':hombres,
-                'mujeres':mujeres,
-                'hvM':hombresvsMujeres,
-                'nivelFormacion':nivelFormacion,
-                'porcentajeFormacion':nivelFormacion['porcentajes'],
-                'permanencia':permanencia,
-                'retencion':retencion
-            }
-            return render(request, 'index.html',mensaje)
+                mensaje={
+                    'desercion':desercion,
+                    'factor':factor,
+                    'edad':edad,
+                    'tecnologica':carreraTecnologica,
+                    'frecuencia':frecuenciaMeses,
+                    'hombres':hombres,
+                    'mujeres':mujeres,
+                    'hvM':hombresvsMujeres,
+                    'nivelFormacion':nivelFormacion,
+                    'porcentajeFormacion':nivelFormacion['porcentajes'],
+                    'permanencia':permanencia,
+                    'retencion':retencion
+                }
+                return render(request, 'index.html',mensaje)
     
     return render(request, 'index.html')
