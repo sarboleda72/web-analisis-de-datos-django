@@ -21,7 +21,7 @@ $(function () {
     }
     if (valorSeleccionado == 2) {
       chartDiv.innerHTML = "";
-      graficoBarras('edad', ["Adulto","Joven", "Adolescente"]);
+      graficodEdades('edad', ["Adulto", "Joven", "Adolescente"]);
     }
     if (valorSeleccionado == 3) {
       chartDiv.innerHTML = "";
@@ -43,7 +43,6 @@ $(function () {
     var chart = {
       series: [
         { name: "", data: vector },
-        //{ name: "Expense this month:", data: [280, 250, 325, 215, 250, 310, 280, 250] },
       ],
 
       chart: {
@@ -51,14 +50,12 @@ $(function () {
         height: 345,
         offsetX: -15,
         toolbar: { show: true },
-        foreColor: "#adb0bb",
+        foreColor: "#000",
         fontFamily: 'inherit',
         sparkline: { enabled: false },
       },
 
-
-      colors: ["#5D87FF", "#49BEFF"],
-
+      colors: ["#39a900"],
 
       plotOptions: {
         bar: {
@@ -69,55 +66,29 @@ $(function () {
           borderRadiusWhenStacked: 'all'
         },
       },
-      markers: { size: 0 },
 
       dataLabels: {
-        enabled: false,
-      },
-
-
-      legend: {
-        show: false,
-      },
-
-
-      grid: {
-        borderColor: "rgba(0,0,0,0.1)",
-        strokeDashArray: 3,
-        xaxis: {
-          lines: {
-            show: false,
-          },
-        },
+        enabled: true,
       },
 
       xaxis: {
         type: "category",
         categories: categorias,
-        labels: {
-          style: { cssClass: "grey--text lighten-2--text fill-color" },
-        },
       },
-
 
       yaxis: {
         show: true,
         min: 0,
         max: Math.ceil(Math.max(...vector) / 10) * 10,
         tickAmount: 4,
-        labels: {
-          style: {
-            cssClass: "grey--text lighten-2--text fill-color",
-          },
-        },
       },
+
       stroke: {
         show: true,
         width: 3,
         lineCap: "butt",
         colors: ["transparent"],
       },
-
 
       tooltip: { theme: "light" },
 
@@ -134,11 +105,42 @@ $(function () {
         }
       ]
 
-
     };
 
     var chart = new ApexCharts(document.querySelector("#chart"), chart);
     chart.render();
+  }
+
+  //=======================================
+  //Grafico de edades
+  //======================================
+  function graficodEdades(nombreOpcion, categorias) {
+    var vector = JSON.parse(document.getElementById(nombreOpcion).getAttribute('data-vector'));
+    var options = {
+      series: [{
+        data: vector
+      }],
+      chart: {
+        type: 'bar',
+        height: 345
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: true,
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: categorias,
+      }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+
   }
 
   //=======================================
@@ -241,7 +243,7 @@ $(function () {
     legend: {
       show: false,
     },
-    colors: ["#13deb9", "#fa896b"],
+    colors: ["#FF0000", "#808080"],
 
     responsive: [
       {
@@ -273,12 +275,12 @@ $(function () {
     chart: {
       id: "sparkline3",
       type: "area",
-      height: 200, 
+      height: 200,
       sparkline: {
         enabled: false,
       },
       fontFamily: "Plus Jakarta Sans', sans-serif",
-      foreColor: "#adb0bb",
+      foreColor: "#000",
       toolbar: {
         show: false,
       },
@@ -290,6 +292,7 @@ $(function () {
         data: vector,
       },
     ],
+
     stroke: {
       curve: "smooth",
       width: 2,
@@ -301,7 +304,7 @@ $(function () {
     markers: {
       size: 0,
     },
-    
+
     tooltip: {
       theme: "dark",
       fixed: {
@@ -316,34 +319,40 @@ $(function () {
       categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"], // Meses del año como etiquetas del eje X
     },
     yaxis: {
-      show: false, 
+      show: false,
     },
   };
-  
+
   new ApexCharts(document.querySelector("#earning"), earning).render();
 
   // =====================================
   // Hombres vs mujeres
   // =====================================
-  var vector = JSON.parse(document.getElementById('hombresvsmujeres').getAttribute('data-vector'));      
+  var vector = JSON.parse(document.getElementById('hombresvsmujeres').getAttribute('data-vector'));
   var hombresvsmujeres = {
     series: vector,
     chart: {
-    width: 250,
-    type: 'pie',
-  },
-  labels: ['Masculino', 'Femenino'],
-  responsive: [{
-    breakpoint: 480,
-    options: {
-      chart: {
-        width: 200
-      },
-      legend: {
-        position: 'bottom'
+      width: 250,
+      type: 'pie',
+    },
+    labels: ['Masculino', 'Femenino'],
+    colors: ["#0084d2", "#ff6070"],
+    dataLabels: {
+      style: {
+        colors: ["#000000"] // Color del texto en porcentaje (en este caso, negro)
       }
-    }
-  }]
+    },
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 200
+        },
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }]
   };
 
   var hombresvsmujeres = new ApexCharts(document.querySelector("#hombresvsmujeres"), hombresvsmujeres);
@@ -351,31 +360,127 @@ $(function () {
   // =====================================
   // tecnologo vs tecnicos
   // =====================================
-  var vector = JSON.parse(document.getElementById('niveldeformacion').getAttribute('data-vector'));  
+  var vector = JSON.parse(document.getElementById('niveldeformacion').getAttribute('data-vector'));
 
   var nivelDeFormacion = {
     series: vector,
     chart: {
-    type: 'donut',
-    width: 250,
-  },
-  labels: ['Técnico', 'Tecnólogo'],
-  colors: ["#FFA500", "#1E90FF"],
-  responsive: [{
-    breakpoint: 480,
-    options: {
-      chart: {
-        width: 200
-      },
-      legend: {
-        position: 'bottom'
+      type: 'donut',
+      width: 250,
+    },
+    labels: ['Técnico', 'Tecnólogo'],
+    colors: ["#FFA500", "#1E90FF"],
+    dataLabels: {
+      style: {
+        colors: ["#000000"] // Color del texto en porcentaje (en este caso, negro)
       }
-    }
-  }]
+    },
+
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 200
+        },
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }]
   };
 
   var nivelDeFormacion = new ApexCharts(document.querySelector("#niveldeformacion"), nivelDeFormacion);
   nivelDeFormacion.render();
-  
+
+  // =====================================
+  // retencion
+  // =====================================
+  var vector = JSON.parse(document.getElementById('retencionvsdesercion').getAttribute('data-vector'));
+
+  var retencionVsDesercion = {
+    series: vector,
+    chart: {
+      type: 'donut',
+      width: 500,
+    },
+    labels: ['Retención', 'Deserción'],
+    colors: ["#39a900", "#FF0000"],
+   
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 200
+        },
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }]
+  };
+
+  var retencionVsDesercion = new ApexCharts(document.querySelector("#retencionvsdesercion"), retencionVsDesercion);
+  retencionVsDesercion.render();
+
+  // =====================================
+  // Permanencia por trimestres
+  // =====================================
+  var vector = JSON.parse(document.getElementById('permanencia').getAttribute('data-vector'));
+
+  var permanencia = {
+    series: [{
+      name: 'Total aprendices',
+      type: 'column',
+      data: vector[1]
+    }, {
+      name: 'Permanencia',
+      type: 'line',
+      data: vector[0]
+    }],
+    chart: {
+      height: 350,
+      width: 500,
+      type: 'line',
+      fontFamily: "Plus Jakarta Sans', sans-serif",
+      foreColor: "#000",
+      toolbar: {
+        show: false,
+      },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "50%",
+        borderRadius: [6],
+        borderRadiusApplication: 'end',
+        borderRadiusWhenStacked: 'all'
+      },
+    },
+    stroke: {
+      width: [0, 4]
+    },
+
+    dataLabels: {
+      enabled: true,
+      enabledOnSeries: [1]
+    },
+    labels: ['Trimestre 1', 'Trimestre 2', 'Trimestre 3', 'Trimestre 4'],
+
+    yaxis: [{
+      title: {
+        text: 'Total aprendices',
+      },
+
+    }, {
+      opposite: true,
+      title: {
+        text: 'Permanencia'
+      }
+    }]
+  };
+
+  var permanencia = new ApexCharts(document.querySelector("#permanencia"), permanencia);
+  permanencia.render();
+
 
 })

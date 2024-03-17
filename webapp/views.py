@@ -5,6 +5,43 @@ import pandas as pd
 import os
 
 # Create your views here.
+
+def calculoPermanencia(fechaIngreso,fechaRetiro,estadoAprendiz):
+    trimestre=[0,0,0,0]
+    retiradoTrimestre=[0,0,0,0]
+
+    for ingreso,retiro,estado in zip(fechaIngreso,fechaRetiro,estadoAprendiz):
+        ingreso=ingreso.split("-")
+        mes = ingreso[1]
+        trimestre[0]+=1 if mes=='01' or mes=='02'or mes=='03' else 0
+        trimestre[1]+=1 if mes=='04' or mes=='05'or mes=='06' else 0
+        trimestre[2]+=1 if mes=='07' or mes=='08'or mes=='09' else 0
+        trimestre[3]+=1 if mes=='10' or mes=='11'or mes=='12' else 0
+        
+        if estado=='Cancelado' or estado=='Retiro voluntario':
+            retiro=retiro.split("-")
+            mes = retiro[1]
+            retiradoTrimestre[0]+=1 if mes=='01' or mes=='02'or mes=='03' else 0
+            retiradoTrimestre[1]+=1 if mes=='04' or mes=='05'or mes=='06' else 0
+            retiradoTrimestre[2]+=1 if mes=='07' or mes=='08'or mes=='09' else 0
+            retiradoTrimestre[3]+=1 if mes=='10' or mes=='11'or mes=='12' else 0
+    
+    permanencia=[trimestre[0]-retiradoTrimestre[0]]
+    permanencia.append((permanencia[0]+trimestre[1]-retiradoTrimestre[1]))
+    permanencia.append((permanencia[1]+trimestre[2]-retiradoTrimestre[2]))
+    permanencia.append((permanencia[2]+trimestre[3]-retiradoTrimestre[3]))
+
+    poblacionInicioTrimestre=[trimestre[0]]
+    poblacionInicioTrimestre.append(permanencia[0]+trimestre[1])
+    poblacionInicioTrimestre.append(permanencia[1]+trimestre[2])
+    poblacionInicioTrimestre.append(permanencia[2]+trimestre[3])
+
+    return [permanencia,poblacionInicioTrimestre]
+
+    
+
+
+
 def calculoNivelformacion(nivelFormacion,estadoAprendiz):
     tecnicosDesertados=0
     tecnologosDesertados=0
@@ -98,9 +135,10 @@ def calculoDesercion(estadoAprendiz):
             cancelado+=1
         if estado=='Retiro voluntario':
             retiroVoluntario+=1
+    totalDesertados=cancelado+retiroVoluntario
     porcentajeDesercion= ((cancelado+retiroVoluntario)/len(estadoAprendiz))*100
-    porcentajeDesercion= str(round(porcentajeDesercion,2))+'%'
-    return {'desertados':porcentajeDesercion,'total':len(estadoAprendiz),'cancelado':cancelado,'retirado':retiroVoluntario}
+    porcentajeDesercion= round(porcentajeDesercion,2)
+    return {'desertados':porcentajeDesercion,'total':len(estadoAprendiz),'cancelado':cancelado,'retirado':retiroVoluntario,'totalDesertados':totalDesertados}
 
 def calculoFactor(factorAprendiz,estadoAprendiz):
     problemasPersonales=0
@@ -180,41 +218,45 @@ def calculoCarreraTecnologica(carrerasTecnologicas,estadoAprendiz):
     return [adso,aniDig,autSisMec,desProEle,desSisEleind,disIntAutMec,gesProInd,gesIntTra,impInfTecInfCom,impRedSerTel,manEquBio,proComMecMaqCNC]
 
 def index(request):
-    if request.method == 'POST' and request.FILES['excel']:
-        excel = request.FILES['excel']
-        fs =FileSystemStorage()
-        if fs.exists('db.xlsx'):
-            fs.delete('db.xlsx')
-        filename= fs.save('db.xlsx', excel)  # Guarda el archivo en la carpeta de media
-        uploaded_file_url=fs.url(filename)   # Genera una URL para acceder al archivo guardado
-        ruta_archivo = os.path.join(settings.MEDIA_ROOT, filename)#captura ruta interna
-        
-        #captura pandas
-        df = pd.read_excel(ruta_archivo)
-        
-        #Llamado de funciones que calculan las metricas
-        desercion=calculoDesercion(df['ESTADO_APRENDIZ'])
-        factor=calculoFactor(df['FACTORES'],df['ESTADO_APRENDIZ'])
-        edad=calculoEdad(df['TIPO_DOCUMENTO'],df['ESTADO_APRENDIZ'],df['EDAD'])
-        carreraTecnologica=calculoCarreraTecnologica(df['PROGRAMA'],df['ESTADO_APRENDIZ'])
-        frecuenciaMeses=calculoFrecuenciaMeses(df['FECHA_RETIRO'],df['ESTADO_APRENDIZ'])
-        hombres=calculoHombres(df['GENERO'],df['ESTADO_APRENDIZ'])
-        mujeres=calculoMujeres(df['GENERO'],df['ESTADO_APRENDIZ'])
-        hombresvsMujeres=calculoHombresvsMujeres(hombres['totalHombres'],mujeres['totalMujeres'])
-        nivelFormacion=calculoNivelformacion(df['NIVEL_DE_FORMACION'],df['ESTADO_APRENDIZ'])
+    if 'excel' in request.FILES:
+        if request.method == 'POST' and request.FILES['excel']:
+            excel = request.FILES['excel']
+            fs =FileSystemStorage()
+            if fs.exists('db.xlsx'):
+                fs.delete('db.xlsx')
+            filename= fs.save('db.xlsx', excel)  # Guarda el archivo en la carpeta de media
+            ruta_archivo = os.path.join(settings.MEDIA_ROOT, filename)#captura ruta interna
+            
+            #captura pandas
+            df = pd.read_excel(ruta_archivo)
+            
+            #Llamado de funciones que calculan las metricas
+            desercion=calculoDesercion(df['ESTADO_APRENDIZ'])
+            factor=calculoFactor(df['FACTORES'],df['ESTADO_APRENDIZ'])
+            edad=calculoEdad(df['TIPO_DOCUMENTO'],df['ESTADO_APRENDIZ'],df['EDAD'])
+            carreraTecnologica=calculoCarreraTecnologica(df['PROGRAMA'],df['ESTADO_APRENDIZ'])
+            frecuenciaMeses=calculoFrecuenciaMeses(df['FECHA_RETIRO'],df['ESTADO_APRENDIZ'])
+            hombres=calculoHombres(df['GENERO'],df['ESTADO_APRENDIZ'])
+            mujeres=calculoMujeres(df['GENERO'],df['ESTADO_APRENDIZ'])
+            hombresvsMujeres=calculoHombresvsMujeres(hombres['totalHombres'],mujeres['totalMujeres'])
+            nivelFormacion=calculoNivelformacion(df['NIVEL_DE_FORMACION'],df['ESTADO_APRENDIZ'])
+            permanencia=calculoPermanencia(df['FECHA_INGRESO'],df['FECHA_RETIRO'],df['ESTADO_APRENDIZ'])
+            retencion=[100-desercion['desertados'],desercion['desertados']]
 
-        mensaje={
-            'desercion':desercion,
-            'factor':factor,
-            'edad':edad,
-            'tecnologica':carreraTecnologica,
-            'frecuencia':frecuenciaMeses,
-            'hombres':hombres,
-            'mujeres':mujeres,
-            'hvM':hombresvsMujeres,
-            'nivelFormacion':nivelFormacion,
-            'porcentajeFormacion':nivelFormacion['porcentajes']
-        }
-        return render(request, 'index.html',mensaje)
+            mensaje={
+                'desercion':desercion,
+                'factor':factor,
+                'edad':edad,
+                'tecnologica':carreraTecnologica,
+                'frecuencia':frecuenciaMeses,
+                'hombres':hombres,
+                'mujeres':mujeres,
+                'hvM':hombresvsMujeres,
+                'nivelFormacion':nivelFormacion,
+                'porcentajeFormacion':nivelFormacion['porcentajes'],
+                'permanencia':permanencia,
+                'retencion':retencion
+            }
+            return render(request, 'index.html',mensaje)
     
     return render(request, 'index.html')
