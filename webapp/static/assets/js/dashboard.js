@@ -21,7 +21,7 @@ $(function () {
     }
     if (valorSeleccionado == 2) {
       chartDiv.innerHTML = "";
-      graficoBarras('edad', ["Adulto","Joven", "Menor de edad"]);
+      graficoBarras('edad', ["Adulto","Joven", "Adolescente"]);
     }
     if (valorSeleccionado == 3) {
       chartDiv.innerHTML = "";
@@ -267,38 +267,41 @@ $(function () {
   // =====================================
   // Earning
   // =====================================
+  var vector = JSON.parse(document.getElementById('frecuencia').getAttribute('data-vector'));
+  console.log("Vector: ", vector)
   var earning = {
     chart: {
       id: "sparkline3",
       type: "area",
-      height: 60,
+      height: 200, 
       sparkline: {
-        enabled: true,
+        enabled: false,
       },
-      group: "sparklines",
       fontFamily: "Plus Jakarta Sans', sans-serif",
       foreColor: "#adb0bb",
+      toolbar: {
+        show: false,
+      },
     },
     series: [
       {
-        name: "Earnings",
+        name: "Deserciones",
         color: "#49BEFF",
-        data: [25, 66, 20, 40, 12, 58, 20],
+        data: vector,
       },
     ],
     stroke: {
       curve: "smooth",
       width: 2,
+      dashArray: [0], // This will hide the data points on the chart
+      markers: {
+        size: 0,
+      },
     },
-    fill: {
-      colors: ["#f3feff"],
-      type: "solid",
-      opacity: 0.05,
-    },
-
     markers: {
       size: 0,
     },
+    
     tooltip: {
       theme: "dark",
       fixed: {
@@ -309,6 +312,14 @@ $(function () {
         show: false,
       },
     },
+    xaxis: {
+      categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"], // Meses del año como etiquetas del eje X
+    },
+    yaxis: {
+      show: false, 
+    },
   };
+  
   new ApexCharts(document.querySelector("#earning"), earning).render();
+  
 })

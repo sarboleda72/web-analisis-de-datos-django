@@ -6,7 +6,42 @@ import os
 
 
 # Create your views here.
+
+def calculoFrecuenciaMeses(fechaRetiro, estadoAprendiz):
+    meses=[0,0,0,0,0,0,0,0,0,0,0,0]
     
+    for fecha,estado in zip(fechaRetiro,estadoAprendiz):
+        
+        if estado=='Cancelado' or estado=='Retiro voluntario':
+            fecha=fecha.split("-")
+            mes = fecha[1]
+            if mes=="01":
+                meses[0]+=1
+            elif mes=="02":
+                meses[1]+=1
+            elif mes=="03":
+                meses[2]+=1
+            elif mes=="04":
+                meses[3]+=1
+            elif mes=="05":
+                meses[4]+=1
+            elif mes=="06":
+                meses[5]+=1
+            elif mes=="07":
+                meses[6]+=1
+            elif mes=="08":
+                meses[7]+=1
+            elif mes=="09":
+                meses[8]+=1
+            elif mes=="10":
+                meses[9]+=1
+            elif mes=="11":
+                meses[10]+=1
+            elif mes=="12":
+                meses[11]+=1
+    return  meses
+
+
 def calculoDesercion(estadoAprendiz):
     cancelado=0
     retiroVoluntario=0
@@ -114,14 +149,15 @@ def index(request):
         factor=calculoFactor(df['FACTORES'],df['ESTADO_APRENDIZ'])
         edad=calculoEdad(df['TIPO_DOCUMENTO'],df['ESTADO_APRENDIZ'],df['EDAD'])
         carreraTecnologica=calculoCarreraTecnologica(df['PROGRAMA'],df['ESTADO_APRENDIZ'])
+        frecuenciaMeses=calculoFrecuenciaMeses(df['FECHA_RETIRO'],df['ESTADO_APRENDIZ'])
 
-        #print(edad)
-        
+
         mensaje={
             'desercion':desercion,
             'factor':factor,
             'edad':edad,
-            'tecnologica':carreraTecnologica
+            'tecnologica':carreraTecnologica,
+            'frecuencia':frecuenciaMeses
         }
         return render(request, 'index.html',mensaje)
     
