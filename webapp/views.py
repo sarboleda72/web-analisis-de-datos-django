@@ -41,16 +41,18 @@ def calculoFactor(factorAprendiz,estadoAprendiz):
     
     return [dificultadesEconomicas,problemasPersonales,faltaDeInteres,faltaApoyoEconomico,oportunidadesLaborales]
 
-def calculoEdad(tipoDocumento,estadoAprendiz):
-    mayorEdad=0
-    menorEdad=0
-    for tipoDocumento,estado in zip(tipoDocumento,estadoAprendiz):
+def calculoEdad(tipoDocumento,estadoAprendiz,edaAprendiz):
+    adulto = 0
+    joven = 0
+    adolescente = 0
+    for tipoDocumento,estado,edad in zip(tipoDocumento,estadoAprendiz,edaAprendiz):
         if estado=='Cancelado' or estado=='Retiro voluntario':
-            if tipoDocumento== 'CC' or tipoDocumento== 'CE' or tipoDocumento== 'PPT' :
-                mayorEdad+=1
-            elif tipoDocumento == 'TI':
-                menorEdad += 1
-    return [mayorEdad,menorEdad]
+            adulto += 1 if edad>=29 and edad<=59 else 0
+            joven += 1 if edad>=19 and edad<=28 else 0
+            if tipoDocumento=='TI':
+                adolescente += 1 if edad<=18 else 0
+
+    return [adulto,joven,adolescente]
 
 def calculoCarreraTecnologica(carrerasTecnologicas,estadoAprendiz):
     adso=0
@@ -110,8 +112,10 @@ def index(request):
         #Llamado de funciones que calculan las metricas
         desercion=calculoDesercion(df['ESTADO_APRENDIZ'])
         factor=calculoFactor(df['FACTORES'],df['ESTADO_APRENDIZ'])
-        edad=calculoEdad(df['TIPO_DOCUMENTO'],df['ESTADO_APRENDIZ'])
+        edad=calculoEdad(df['TIPO_DOCUMENTO'],df['ESTADO_APRENDIZ'],df['EDAD'])
         carreraTecnologica=calculoCarreraTecnologica(df['PROGRAMA'],df['ESTADO_APRENDIZ'])
+
+        #print(edad)
         
         mensaje={
             'desercion':desercion,

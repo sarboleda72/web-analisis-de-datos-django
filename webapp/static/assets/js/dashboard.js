@@ -21,7 +21,7 @@ $(function () {
     }
     if (valorSeleccionado == 2) {
       chartDiv.innerHTML = "";
-      graficoBarras('edad', ["Mayor de edad", "Menor de edad"]);
+      graficoBarras('edad', ["Adulto","Joven", "Menor de edad"]);
     }
     if (valorSeleccionado == 3) {
       chartDiv.innerHTML = "";
